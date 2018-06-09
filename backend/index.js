@@ -93,74 +93,23 @@ const mongooseOptions = {
 
 mongooseConnection.connect(config.mongoUri, mongooseOptions)
 
-app.listen(config.port, () => {
-  logger.info(`Server listening at ${config.port}`)
-})
+const raw = require('modules/rawTransaction');
 
-const raw = require('modules/rawTransaction')
+raw.init()
+  .then(() => {
+    app.listen(config.port, () => {
+      logger.info(`Server listening at ${config.port}`);
 
-setTimeout(() => {
-raw.createTx({from: "sontt", quantity: 100}, (err, res) => {
-  // console.log(err)
-  // console.log('================')
-  // console.log(res)
-})
-}, 1000);
+      // FOR TEST ONLY
+      // console.log('create');
+      // raw.createTx({from: "sontt", quantity: 100}, (err, res) => {
 
+      //   rawTx = raw.signTx("5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3", res);
+      //   console.log('rawTx :', rawTx);
+      //   raw.sendRawTx(JSON.stringify(rawTx), (err, res) => {
+      //     console.log("sendRawTx", err, res);
+      //   });
 
-// =====================
-
-// let expiration
-// let ref_block_num
-// let chainId
-// eos.getInfo({})
-//   .then(info => {
-//     let chainId = info.chain_id
-//     let chainDate = new Date(info.head_block_time + 'Z')
-//     let expireInSeconds = 60 // 60s
-//     expiration = new Date(chainDate.getTime() + expireInSeconds * 1000);
-
-//     // // Back-up 3 blocks to help avoid mini-forks.
-//     // // todo: dawn3 ((head_blocknum/0xffff)*0xffff) + head_blocknum%0xffff
-//     ref_block_num = info.head_block_num - 3 & 0xFFFF;
-//     let blockNumber = info.head_block_num - 3
-
-//     return eos.getBlock(blockNumber)
-//   })
-//   .then(block => {
-
-//     var txObject = {
-//       "expiration": expiration.toISOString().split('.')[0],
-//       "ref_block_num": ref_block_num,
-//       "ref_block_prefix": block.ref_block_prefix,
-//       "net_usage_words": 0,
-//       "max_cpu_usage_ms": 0,
-//       "delay_sec": 0,
-//       "context_free_actions": [],
-//       "actions": [
-//         {
-//           "account": "eosio.token",
-//           "name": "transfer",
-//           "authorization": [{ "actor": "data.from", "permission": "active" }],
-//           "data": "data"
-//         }
-//       ],
-//       "transaction_extensions": []
-//     };
-
-//     var buf = Fcbuffer.toBuffer(eos.fc.structs.transaction, txObject);
-//     // var tr = Fcbuffer.fromBuffer(structs.transaction, buf);
-//     // var chainIdBuf = new Buffer(chainId, 'hex');
-//     // var signBuf = Buffer.concat([chainIdBuf, buf, new Buffer(new Uint8Array(32))]);
-//     // var mytransaction = {
-//     //   compression: 'none',
-//     //   transaction: tr,
-//     //   signatures: [],
-//     //   unsigned_rawtx: ""
-//     // }
-//     // mytransaction.unsigned_rawtx = signBuf;
-
-//     // console.log('======================')
-//     // console.log(mytransaction)
-//     // return cb(null, mytransaction);
-//   })
+      // })
+    })
+  });

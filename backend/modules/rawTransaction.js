@@ -1,5 +1,6 @@
 const Request    = require("request");
 const Eosjs_api  = require('eosjs-api');
+const ecc        = require("eosjs-ecc");
 const Fcbuffer   = require('fcbuffer');
 const Structs    = require('../node_modules/eosjs/lib/structs');
 const AssetCache = require('../node_modules/eosjs/lib/asset-cache');
@@ -40,6 +41,10 @@ class RawService {
     var chainId = 'cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f'
     self.config.chainId = chainId ? chainId : '00'.repeat(32);
     self.expireTime = 300 // 60s
+  }
+
+  init() {
+    return this.config.abiCache.abiAsync("pen");
   }
 
   createTx(data, cb) {
@@ -89,7 +94,7 @@ class RawService {
                   "account": "pen",
                   "name": "issue",
                   "authorization": [{ "actor": "pen", "permission": "active" }],
-                  "data": { from: "pen", quantity: 1}
+                  "data": data
                 }
               )
 
@@ -116,6 +121,40 @@ class RawService {
       }
     });
 
+  }
+
+  sendRawTx(rawtx,cb){
+    var self = this; 
+    Request.post({
+        headers: { 'content-type': 'application/x-www-form-urlencoded' },
+        url: self.rpcUrl + "/chain/push_transaction",
+        body: rawtx
+    }, (error, response, body) => {
+        if (error) {
+            return cb(error,null);
+        }
+        else {
+            console.log("status code:", response.statusCode);
+            if (response.statusCode > 266) { //range in 2xx
+                return cb(body,null)
+            }
+            var result = JSON.parse(body);
+            return cb(null, result)
+        }
+    });
+  }
+
+  signTx(wif, tx) {
+    // var buff = Buffer.from(tx.transaction.unsigned_rawtx);
+    var buff = tx.unsigned_rawtx;
+    var sign = ecc.sign(buff, wif);
+    var result = {};
+    result.compression = tx.compression;
+    result.transaction = tx.transaction;
+    result.signatures = [sign];//tx.data.signatures.push(sign);
+    //console.log(sign);
+    console.log(JSON.stringify(result));
+    return result;
   }
 
   consoleObjCallbackLog() {
