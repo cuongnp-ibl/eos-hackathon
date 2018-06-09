@@ -7,6 +7,7 @@ nodeos -e -p eosio \
   --wallet-dir . \
   --signature-provider EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV=KEY:5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3 \
   --http-server-address=0.0.0.0:8888 \
+  --filter-on pen:transfer: \
   --filter-on pen:addwhitelist: \
   --filter-on pen:delwhitelist: \
   --filter-on pen:donate: \
