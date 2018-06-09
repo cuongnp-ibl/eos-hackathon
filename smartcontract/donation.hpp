@@ -5,7 +5,6 @@ using namespace eosio;
 using namespace std;
 
 class donation : public contract {
-  // using contract::contract;
 
 public:
   donation(account_name self)
@@ -19,24 +18,23 @@ public:
   // @abi action
   void donate(account_name from, uint64_t quantity);
   // @abi action
-  void lend(account_name to, uint64_t quantity);
+  void requestbor(account_name to, uint64_t quantity);
+  // @abi action
+  void approvebor(uint64_t req_id);
+  // @abi action
+  void cleartable(account_name to);
 
 private:
   //@abi table donate
   struct donate_rec {
-    uint64_t id;
-    account_name issuer;
+    account_name donor;
     uint32_t quantity;
 
-    auto primary_key() const { return id; }
-    account_name get_issuer() const { return issuer; }
-    EOSLIB_SERIALIZE(donate_rec, (id)(issuer)(quantity))
+    auto primary_key() const { return donor; }
+    EOSLIB_SERIALIZE(donate_rec, (donor)(quantity))
   };
-  typedef multi_index<
-      N(donate), donate_rec,
-      indexed_by<N(by_issuer), const_mem_fun<donate_rec, account_name,
-                                             &donate_rec::get_issuer>>>
-      donate_table;
+
+  typedef multi_index<N(donate), donate_rec> donate_table;
 
   //@abi table whitelist
   struct whitelist_rec {
@@ -67,4 +65,4 @@ private:
   blacklist_table _tb_blacklist;
 };
 
-EOSIO_ABI(donation, (addwhitelist)(delwhitelist)(donate)(lend))
+EOSIO_ABI(donation, (addwhitelist)(delwhitelist)(donate)(requestbor)(approvebor)(cleartable))
