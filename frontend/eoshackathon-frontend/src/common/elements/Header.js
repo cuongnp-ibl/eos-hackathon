@@ -32,7 +32,7 @@ class App extends Component {
     return (
       <div className='inf-header-container'>
         <Navbar color='' expand='md' className='inf-header-row'>
-          <NavbarBrand href='/'>INF</NavbarBrand>
+          <NavbarBrand href='/'>PEN</NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className='ml-auto' navbar>

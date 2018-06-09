@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { axios } from 'axios'
-import BorrowForm from '../components/BorrowForm'
+import BorrowForm from '../components/MoneyBackForm'
 import { BASE_URL } from '../../../../common/config'
 import { postBorrow } from '../actions'
 

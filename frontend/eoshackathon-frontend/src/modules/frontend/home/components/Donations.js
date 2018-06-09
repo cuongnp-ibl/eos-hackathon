@@ -22,6 +22,8 @@ class Donations extends Component {
                 padding: 20,
                 backgroundColor: 'white'
               }}>
+                <div style={{ fontWeight: 'bold', marginBottom: 5 }}>EOS</div>
+                <img src='../../../../assets/eos.jpg' alt='' />
                 <QRCode value='pen.abi' />
                 <p style={{ padding: 0, margin: 0 }}>Balance: {balance['eos'].balance}</p>
                 <span style={{ border: 'none', backgroundColor: 'white', textAlign: 'center' }}>pen.abi</span>
@@ -40,6 +42,7 @@ class Donations extends Component {
                 padding: 20,
                 backgroundColor: 'white'
               }}>
+                <div style={{ fontWeight: 'bold', marginBottom: 5 }}>ETH</div>
                 <QRCode value='0xc06bf762bc60ca9518669897348c6d694e453678' />
                 <p style={{ padding: 0, margin: 0 }}>Balance: {balance['eth'].balance}</p>
                 <span style={{ border: 'none', backgroundColor: 'white', textAlign: 'center', wordWrap: 'break-out' }}>0xc06bf762bc60ca9...00000</span>
@@ -59,6 +62,7 @@ class Donations extends Component {
                 padding: 20,
                 backgroundColor: 'white'
               }}>
+                <div style={{ fontWeight: 'bold', marginBottom: 5 }}>BTC</div>
                 <QRCode value='0x1Lf2vaGgLmjyHBH3Yt94Sa4myFMC9bxtDr' />
                 <p style={{ padding: 0, margin: 0 }}>Balance: {balance['btc'].balance}</p>
                 <span style={{ border: 'none', backgroundColor: 'white', textAlign: 'center' }}>0x1Lf2vaGgLm....4my9bxtDr</span>

@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
+import Title from '../../common/elements/Title'
+import FrontEndTemplate from '../frontendTemplate'
 
-class App extends Component {
+class AboutUS extends Component {
   render () {
     return (
-      <div>
-        About
-      </div>
+      <FrontEndTemplate>
+        <Title title='About us' />
+      </FrontEndTemplate>
     )
   }
 }
 
-export default App
+export default AboutUS

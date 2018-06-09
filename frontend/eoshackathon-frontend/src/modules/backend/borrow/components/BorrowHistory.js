@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+import { Button } from 'reactstrap'
 import { BORROW_STATUS_COLOR } from '../../../../common/config'
 
 const borrowHistoryItem = ({item, index}) => (
@@ -25,8 +26,12 @@ const borrowHistoryItem = ({item, index}) => (
         </div>
       </div>
     </div>
-    <div style={{ width: 100, display: 'flex', justifyContent: 'flex-end', height: 18 }}>
-      <span className={`badge badge-pill ${BORROW_STATUS_COLOR[item.status]}`}>{item.status}</span>
+    <div style={{ width: 100 }}>
+      {
+        item.status === 'INREVIEW'
+          ? <Button color='danger'>Verify</Button>
+          : <span className={`badge badge-pill ${BORROW_STATUS_COLOR[item.status]}`}>{item.status}</span>
+      }
     </div>
   </div>
 )
@@ -41,7 +46,6 @@ class DonationHistory extends Component {
       <div className='row'>
         <div className='inf-section'>
           <div style={{ }}>
-            <h4>Borrow History</h4>
             <ul style={{ padding: 0 }}>
               {borrowHistory.map((item, index) => borrowHistoryItem({ item, index }))}
             </ul>
