@@ -16,11 +16,18 @@ import About from './screens/frontend/About'
 import Topics from './screens/frontend/Topics'
 import KYBRegistration from './screens/frontend/KYBRegistration'
 import Login from './screens/frontend/Login'
+import Borrow from './screens/frontend/Borrower'
 
 import AdminDonate from './screens/backend/AdminDonate'
 
 import { MODULE_NAME as HOME_MODULE_NAME } from './modules/frontend/home/model'
+import { MODULE_NAME as USER_MODULE_NAME } from './modules/frontend/login/model'
+import { MODULE_NAME as BORROW_MODULE_NAME } from './modules/frontend/borrow/model'
+import { MODULE_NAME as ADMIN_DONATE_MODULE_NAME } from './modules/backend/donate/model'
 import homeReducer from './modules/frontend/home/reducers'
+import userReducer from './modules/frontend/login/reducers'
+import borrowReducer from './modules/frontend/borrow/reducers'
+import adminDonateReducer from './modules/backend/donate/reducers'
 
 // Create a history of your choosing (we're using a browser history in this case)
 const history = createHistory()
@@ -38,6 +45,11 @@ const enhancer = composeEnhancers(
 const store = createStore(
   combineReducers({
     [HOME_MODULE_NAME]: homeReducer,
+    [BORROW_MODULE_NAME]: borrowReducer,
+    [USER_MODULE_NAME]: userReducer,
+
+    // Admin
+    [ADMIN_DONATE_MODULE_NAME]: adminDonateReducer,
     router: routerReducer
   }),
   enhancer // applyMiddleware(middleware)
@@ -54,6 +66,7 @@ class App extends Component {
             <Route path='/kyb-registration' component={KYBRegistration} />
             <Route path='/topics' component={Topics} />
             <Route path='/login' component={Login} />
+            <Route path='/user/borrow' component={Borrow} />
 
             {/* TODO: Admin */}
             <Route path='/admin/donate-management' component={AdminDonate} />

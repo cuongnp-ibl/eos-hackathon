@@ -3,28 +3,57 @@ import { handleActions } from 'redux-actions'
 import * as actions from './actions'
 
 const defaultState = {
+  tokenStatus: {
+    'currentLending': 1000000,
+    'availabe': 20000000
+  },
+  balance: {
+    eos: {
+      balance: 1000
+    },
+    eth: {
+      balance: 100
+    },
+    btc: {
+      balance: 100
+    }
+  },
   donateHistory: [{
-    from: 'jeb',
-    amount: '1000 EOS',
-    note: 'hope for help',
-    date: 1528530221618
-  }, {
-    from: 'alice',
-    amount: '50 EOS',
-    note: '',
-    date: 1528530221618
-  }, {
-    from: 'donal',
-    amount: '1000000 EOS',
-    note: 'from donal with love',
-    date: 1528530221618
-  } ]
+    'id': '1',
+    'from': 'daicuong',
+    'amount': '100',
+    'type': 'EOS',
+    'memo': 'Hope this help!',
+    'donateDate': 1528553367201,
+    'converToFiatDate': 1528553367201,
+    'fiat': '2000',
+    'status': 'donated'
+  },
+  {
+    'id': '2',
+    'from': 'daicuong',
+    'amount': '100',
+    'type': 'EOS',
+    'memo': 'Hope this help!',
+    'donateDate': 1528553367201,
+    'converToFiatDate': 1528553367201,
+    'fiat': '20000',
+    'status': 'inreview'
+  }]
 }
 
 const handlers = {
-  [actions.getDonateHistory]: (state, action) => ({
+  [actions.getDonationHistory]: (state, action) => ({
     ...state,
     ...{ donateHistory: action.payload }
+  }),
+  [actions.getBalance]: (state, action) => ({
+    ...state,
+    ...{ balance: action.payload }
+  }),
+  [actions.getTokenStatus]: (state, action) => ({
+    ...state,
+    ...{ tokenStatus: action.payload }
   })
 }
 

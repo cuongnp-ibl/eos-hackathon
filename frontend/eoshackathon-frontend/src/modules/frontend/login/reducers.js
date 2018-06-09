@@ -3,28 +3,18 @@ import { handleActions } from 'redux-actions'
 import * as actions from './actions'
 
 const defaultState = {
-  donateHistory: [{
-    from: 'jeb',
-    amount: '1000 EOS',
-    note: 'hope for help',
-    date: 1528530221618
-  }, {
-    from: 'alice',
-    amount: '50 EOS',
-    note: '',
-    date: 1528530221618
-  }, {
-    from: 'donal',
-    amount: '1000000 EOS',
-    note: 'from donal with love',
-    date: 1528530221618
-  } ]
+  user: {
+    'userId': 123,
+    'level': 1, // 2, 3,...
+    'userName': 'trieucuong',
+    'score': 100
+  }
 }
 
 const handlers = {
-  [actions.getDonateHistory]: (state, action) => ({
+  [actions.login]: (state, action) => ({
     ...state,
-    ...{ donateHistory: action.payload }
+    ...{ user: action.payload }
   })
 }
 

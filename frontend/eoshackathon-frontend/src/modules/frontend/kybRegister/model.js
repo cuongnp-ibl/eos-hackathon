@@ -1,1 +1,1 @@
-export const MODULE_NAME = 'HOME'
+export const MODULE_NAME = 'KYC_REGISTER'

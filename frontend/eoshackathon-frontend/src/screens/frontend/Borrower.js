@@ -4,7 +4,7 @@ import BorrowHistory from '../../modules/frontend/borrow/containers/BorrowHistor
 import Title from '../../common/elements/Title'
 import FrontEndTemplate from '../frontendTemplate'
 
-class App extends Component {
+class Borrow extends Component {
   render () {
     return (
       <FrontEndTemplate>
@@ -16,4 +16,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default Borrow

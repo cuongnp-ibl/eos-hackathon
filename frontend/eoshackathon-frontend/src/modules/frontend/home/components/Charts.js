@@ -46,6 +46,8 @@ const chartOptions = {
 
 class Charts extends Component {
   render () {
+    const { tokenStatus } = this.props
+
     return (
       <div className='row'>
         <div className='inf-charts col-md-12'>
@@ -67,8 +69,8 @@ class Charts extends Component {
           >
             <div style={{}}>
               <h4 style={{ color: 'white' }}>WE ARE HAVING</h4>
-              <p style={{ color: 'white' }}>Currently in lending: <strong>14,000,000</strong>USD</p>
-              <p style={{ color: 'white' }}>Foundation available fund: <strong>4,000,000</strong>USD</p>
+              <p style={{ color: 'white' }}>Currently in lending: <strong>{Intl.NumberFormat({ style: 'currency', currency: 'USD' }).format(tokenStatus.currentLending)}</strong>USD</p>
+              <p style={{ color: 'white' }}>Foundation available fund: <strong>{Intl.NumberFormat({ style: 'currency', currency: 'USD' }).format(tokenStatus.availabe)}</strong>USD</p>
             </div>
             <Pie data={chartData} options={chartOptions} />
           </div>
