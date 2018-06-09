@@ -11,13 +11,13 @@ cleos push action $SC_NAME delwhitelist '["inita"]' -p $SC_NAME
 cleos get table $SC_NAME $SC_NAME whitelist
 cleos get table $SC_NAME $SC_NAME blacklist
 
-# donate
+# issue
 cleos push action $SC_NAME issue '["inita", 10]' -p $SC_NAME
 cleos push action $SC_NAME issue '["initb", 15]' -p $SC_NAME
 cleos push action $SC_NAME issue '["initc", 20]' -p $SC_NAME
 
 # get table
-cleos get table $SC_NAME $SC_NAME donate
+cleos get table $SC_NAME $SC_NAME issue
 
 # clear table
 cleos push action $SC_NAME cleartable '["all"]' -p $SC_NAME
@@ -28,7 +28,7 @@ cleos get table $SC_NAME $SC_NAME blacklist
 cleos get table $SC_NAME $SC_NAME summary
 cleos get table $SC_NAME $SC_NAME loanreq
 cleos get table $SC_NAME $SC_NAME loan
-cleos get table $SC_NAME $SC_NAME donate
+cleos get table $SC_NAME $SC_NAME issue
 cleos get table $SC_NAME $SC_NAME paybackreq
 
 # Web API RPC
@@ -75,11 +75,11 @@ cleos push action $SC_NAME addwhitelist '["b.borrower"]' -p pen
 # check KYC
 cleos get table $SC_NAME $SC_NAME whitelist
 
-# Issue token from donate
+# Issue token from issue
 cleos push action $SC_NAME issue '["a.donor", 1000]' -p $SC_NAME
 
-# Check donate table
-cleos get table $SC_NAME $SC_NAME donate
+# Check issue table
+cleos get table $SC_NAME $SC_NAME issue
 
 # Request borrow
 cleos push action $SC_NAME reqloan '["a.borrower", 20]' -p a.borrower
@@ -102,4 +102,7 @@ cleos get table $SC_NAME $SC_NAME paybackreq
 
 # Approge payback
 cleos push action $SC_NAME apprpayback '[2]' -p pen
+
+# Check payback request table
+cleos get table $SC_NAME $SC_NAME paybackreq
 

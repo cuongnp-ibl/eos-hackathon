@@ -8,7 +8,7 @@ class pen : public contract {
 
 public:
   pen(account_name self)
-      : contract(self), _tb_donate(_self, _self), _tb_whitelist(_self, _self),
+      : contract(self), _tb_issue(_self, _self), _tb_whitelist(_self, _self),
         _tb_blacklist(_self, _self), _tb_summary(_self, _self), _tb_loan_req(_self, _self),
         _tb_loan(_self, _self), _tb_payback_req(_self, _self) {}
 
@@ -34,16 +34,16 @@ public:
   void cleartable(string type);
 
 private:
-  //@abi table donate
-  struct donate_rec {
+  //@abi table issue
+  struct issue_rec {
     account_name donor;
     uint32_t quantity;
 
     auto primary_key() const { return donor; }
-    EOSLIB_SERIALIZE(donate_rec, (donor)(quantity))
+    EOSLIB_SERIALIZE(issue_rec, (donor)(quantity))
   };
 
-  typedef multi_index<N(donate), donate_rec> donate_table;
+  typedef multi_index<N(issue), issue_rec> issue_table;
 
   //@abi table whitelist
   struct whitelist_rec {
@@ -124,7 +124,7 @@ private:
 
   typedef multi_index<N(paybackreq), payback_req_rec> payback_req_table;
 
-  donate_table _tb_donate;
+  issue_table _tb_issue;
   whitelist_table _tb_whitelist;
   blacklist_table _tb_blacklist;
   summary_table _tb_summary;

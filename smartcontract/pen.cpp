@@ -37,17 +37,17 @@ void pen::delwhitelist(account_name borrower) {
 
 // issue token from donate
 void pen::issue(account_name from, uint64_t quantity) {
-  auto itr_from = _tb_donate.find(from);
+  auto itr_from = _tb_issue.find(from);
 
-  if (itr_from == _tb_donate.end()) {
+  if (itr_from == _tb_issue.end()) {
     // Not exist in db
-    _tb_donate.emplace(_self, [&](auto &row) {
+    _tb_issue.emplace(_self, [&](auto &row) {
       row.donor = from;
       row.quantity = quantity;
     });
   } else {
     // Exist in db
-    _tb_donate.modify(itr_from, 0,
+    _tb_issue.modify(itr_from, 0,
                       [&](auto &row) { row.quantity += quantity; });
   }
 }
@@ -160,10 +160,10 @@ void pen::cleartable(string type) {
     itr2 = _tb_blacklist.begin();
   }
 
-  auto itr3 = _tb_donate.begin();
-  while (itr3 != _tb_donate.end()) {
-    _tb_donate.erase(itr3);
-    itr3 = _tb_donate.begin();
+  auto itr3 = _tb_issue.begin();
+  while (itr3 != _tb_issue.end()) {
+    _tb_issue.erase(itr3);
+    itr3 = _tb_issue.begin();
   }
 
   auto itr4 = _tb_summary.begin();
