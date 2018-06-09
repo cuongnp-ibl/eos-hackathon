@@ -25,7 +25,7 @@ public:
   // @abi action
   void denyloan(uint64_t req_id);
   // @abi action
-  void reqpayback(uint64_t req_id);
+  void reqpayback(uint64_t req_id, uint32_t quantity);
   // @abi action
   void apprpayback(uint64_t req_id);
   // @abi action
@@ -69,7 +69,7 @@ private:
 
   typedef multi_index<N(blacklist), blacklist_rec> blacklist_table;
 
-  //@abi table summary
+  //@abi table summary i64
   struct summary_rec {
     uint64_t id;
     uint64_t donate;
@@ -133,6 +133,8 @@ private:
   payback_req_table _tb_payback_req;
 
   void require_whitelist(account_name name);
+  // eosio::multi_index<N(summary), pen::summary_rec>::const_iterator get_summary();
+  void update_summary(uint8_t type, uint32_t quantity);
 };
 
 EOSIO_ABI(pen, (addwhitelist)(delwhitelist)(issue)(reqloan)(apprloan)(denyloan)(reqpayback)(apprpayback)(denypayback)(cleartable))

@@ -1,5 +1,13 @@
 #include "pen.hpp"
 
+const uint64_t ID_SUMMARY = 1;
+const uint8_t TYPE_DONATE = 1;
+const uint8_t TYPE_PAYBACK = 2;
+const uint8_t TYPE_INTEREST = 3;
+const uint8_t TYPE_LOAN = 4;
+const uint8_t TYPE_LOAN_MINUS = 5;
+const uint8_t TYPE_REMAIN = 6;
+
 // Add borrower to whitelist KYB
 void pen::addwhitelist(account_name borrower, uint8_t score) {
   require_auth(_self);
@@ -47,9 +55,11 @@ void pen::issue(account_name from, uint64_t quantity) {
     });
   } else {
     // Exist in db
-    _tb_issue.modify(itr_from, 0,
-                      [&](auto &row) { row.quantity += quantity; });
+    _tb_issue.modify(itr_from, 0, [&](auto &row) { row.quantity += quantity; });
   }
+
+  // Update summary
+  update_summary(TYPE_DONATE, quantity);
 }
 
 // Borrower request to loan money
@@ -83,6 +93,9 @@ void pen::apprloan(uint64_t req_id) {
     row.quantity = itr_req->quantity;
   });
 
+  // Update summary
+  update_summary(TYPE_LOAN, itr_req->quantity);
+
   // Remove loan request
   _tb_loan_req.erase(itr_req);
 }
@@ -99,9 +112,11 @@ void pen::denyloan(uint64_t req_id) {
 }
 
 // Borrower request payback
-void pen::reqpayback(uint64_t req_id) {
+void pen::reqpayback(uint64_t req_id, uint32_t quantity) {
   auto itr = _tb_loan.find(req_id);
   eosio_assert(itr != _tb_loan.end(), "Loan has not exist");
+
+  eosio_assert(itr->quantity < quantity, "Payback quantity must be larger than loan quantity");
 
   require_auth(itr->borrower);
 
@@ -109,7 +124,7 @@ void pen::reqpayback(uint64_t req_id) {
   _tb_payback_req.emplace(_self, [&](auto &row) {
     row.id = itr->id;
     row.borrower = itr->borrower;
-    row.quantity = itr->quantity;
+    row.quantity = quantity;
   });
 }
 
@@ -121,14 +136,26 @@ void pen::apprpayback(uint64_t req_id) {
   eosio_assert(itr_req != _tb_payback_req.end(),
                "Payback request has not exist");
 
+  uint32_t interest = itr_req->quantity;
+  // Update summary
+  update_summary(TYPE_PAYBACK, itr_req->quantity);
+
   // Remove payback request
   _tb_payback_req.erase(itr_req);
 
   auto itr_req_loan = _tb_loan.find(req_id);
   eosio_assert(itr_req_loan != _tb_loan.end(), "Loan has not exist");
 
+  // Update summary
+  update_summary(TYPE_LOAN_MINUS, itr_req_loan->quantity);
+
+  interest -= itr_req_loan->quantity;
+
   // Remove loan request
   _tb_loan.erase(itr_req_loan);
+
+  // Update summary
+  update_summary(TYPE_INTEREST, interest);
 }
 
 // Operator deny payback from borrower
@@ -177,10 +204,71 @@ void pen::cleartable(string type) {
     _tb_loan_req.erase(itr5);
     itr5 = _tb_loan_req.begin();
   }
+
+  auto itr6 = _tb_loan.begin();
+  while (itr6 != _tb_loan.end()) {
+    _tb_loan.erase(itr6);
+    itr6 = _tb_loan.begin();
+  }
+
+  auto itr7 = _tb_payback_req.begin();
+  while (itr7 != _tb_payback_req.end()) {
+    _tb_payback_req.erase(itr7);
+    itr7 = _tb_payback_req.begin();
+  }
 }
 
 void pen::require_whitelist(account_name name) {
   auto itr = _tb_whitelist.find(name);
   eosio_assert(itr != _tb_whitelist.end(),
                "Account has not exists in whitelist");
+}
+
+void pen::update_summary(uint8_t type, uint32_t quantity) {
+  auto itr = _tb_summary.find(ID_SUMMARY);
+
+  summary_rec newValue = {newValue.id = ID_SUMMARY, newValue.donate = 0,
+                          newValue.payback = 0,     newValue.interest = 0,
+                          newValue.loan = 0,        newValue.remain = 0};
+  
+  switch(type) {
+    case TYPE_DONATE:
+      newValue.donate += quantity;
+      break;
+    case TYPE_PAYBACK:
+      newValue.payback += quantity;
+      break;
+    case TYPE_INTEREST:
+      newValue.interest += quantity;
+      break;
+    case TYPE_LOAN:
+      newValue.loan += quantity;
+      break;
+    case TYPE_LOAN_MINUS:
+      newValue.loan -= quantity;
+      break;
+    case TYPE_REMAIN:
+      newValue.remain += quantity;
+      break;
+  }
+
+  if (itr == _tb_summary.end()) {
+    _tb_summary.emplace(_self, [&](auto &row) {
+      row.id = newValue.id;
+      row.donate = newValue.donate;
+      row.payback = newValue.payback;
+      row.interest = newValue.interest;
+      row.loan = newValue.loan;
+      row.remain = newValue.remain;
+    });
+  } else {
+    _tb_summary.modify(itr, 0, [&](auto &row) {
+      row.id = newValue.id;
+      row.donate += newValue.donate;
+      row.payback += newValue.payback;
+      row.interest += newValue.interest;
+      row.loan += newValue.loan;
+      row.remain += newValue.remain;
+    });
+  }
 }
