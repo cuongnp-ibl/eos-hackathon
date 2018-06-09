@@ -7,6 +7,7 @@ const uint8_t TYPE_INTEREST = 3;
 const uint8_t TYPE_LOAN = 4;
 const uint8_t TYPE_LOAN_MINUS = 5;
 const uint8_t TYPE_REMAIN = 6;
+const uint8_t TYPE_NUM_REQ = 7;
 
 // Add borrower to whitelist KYB
 void pen::addwhitelist(account_name borrower, uint8_t score) {
@@ -69,14 +70,17 @@ void pen::reqloan(account_name borrower, uint64_t quantity) {
   // Check whitelist
   require_whitelist(borrower);
 
-  // TODO: check with remain
-
+  uint64_t req_no = get_request_no();
   // Insert loan request
   _tb_loan_req.emplace(_self, [&](auto &row) {
-    row.id = _tb_loan_req.available_primary_key();
+    // row.id = _tb_loan_req.available_primary_key();
+    row.id = req_no;
     row.borrower = borrower;
     row.quantity = quantity;
   });
+
+  // Update summary
+  update_summary(TYPE_NUM_REQ, 1);
 }
 
 // Operator approve loan request from borrower
@@ -85,6 +89,13 @@ void pen::apprloan(uint64_t req_id) {
 
   auto itr_req = _tb_loan_req.find(req_id);
   eosio_assert(itr_req != _tb_loan_req.end(), "Loan request has not exist");
+
+  // TODO: check with remain
+  auto itr_summary = _tb_summary.find(ID_SUMMARY);
+  eosio_assert(itr_summary != _tb_summary.end(), "Summary has not exist");
+
+  uint64_t maxLoanValue = itr_summary->donate - itr_summary->loan + itr_summary->interest;
+  eosio_assert(itr_req->quantity < maxLoanValue, "Have not enough money");
 
   // Store to loan table
   _tb_loan.emplace(_self, [&](auto &row) {
@@ -250,6 +261,9 @@ void pen::update_summary(uint8_t type, uint32_t quantity) {
     case TYPE_REMAIN:
       newValue.remain += quantity;
       break;
+    case TYPE_NUM_REQ:
+      newValue.numreq += quantity;
+      break;
   }
 
   if (itr == _tb_summary.end()) {
@@ -260,6 +274,7 @@ void pen::update_summary(uint8_t type, uint32_t quantity) {
       row.interest = newValue.interest;
       row.loan = newValue.loan;
       row.remain = newValue.remain;
+      row.numreq = newValue.numreq;
     });
   } else {
     _tb_summary.modify(itr, 0, [&](auto &row) {
@@ -269,6 +284,16 @@ void pen::update_summary(uint8_t type, uint32_t quantity) {
       row.interest += newValue.interest;
       row.loan += newValue.loan;
       row.remain += newValue.remain;
+      row.numreq += newValue.numreq;
     });
   }
+}
+
+uint64_t pen::get_request_no() {
+  auto itr = _tb_summary.find(ID_SUMMARY);
+  if( itr == _tb_summary.end() ) {
+    return 0;
+  }
+
+  return itr->numreq;
 }

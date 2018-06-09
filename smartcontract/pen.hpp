@@ -77,10 +77,11 @@ private:
     uint64_t interest;
     uint64_t loan;
     uint64_t remain;
+    uint64_t numreq;
 
     auto primary_key() const { return id; }
 
-    EOSLIB_SERIALIZE(summary_rec, (id)(donate)(payback)(interest)(loan)(remain))
+    EOSLIB_SERIALIZE(summary_rec, (id)(donate)(payback)(interest)(loan)(remain)(numreq))
   };
 
   typedef multi_index<N(summary), summary_rec> summary_table;
@@ -133,8 +134,8 @@ private:
   payback_req_table _tb_payback_req;
 
   void require_whitelist(account_name name);
-  // eosio::multi_index<N(summary), pen::summary_rec>::const_iterator get_summary();
   void update_summary(uint8_t type, uint32_t quantity);
+  uint64_t get_request_no();
 };
 
 EOSIO_ABI(pen, (addwhitelist)(delwhitelist)(issue)(reqloan)(apprloan)(denyloan)(reqpayback)(apprpayback)(denypayback)(cleartable))
