@@ -99,7 +99,19 @@ void pen::denyloan(uint64_t req_id) {
 }
 
 // Borrower request payback
-void pen::reqpayback(uint64_t req_id) {}
+void pen::reqpayback(uint64_t req_id) {
+  auto itr = _tb_loan.find(req_id);
+  eosio_assert(itr != _tb_loan.end(), "Load has not exist");
+
+  require_auth(itr->borrower);
+
+  // Insert payback request
+  _tb_payback_req.emplace(_self, [&](auto &row) {
+    row.id = itr->id;
+    row.borrower = itr->borrower;
+    row.quantity = itr->quantity;
+  });
+}
 
 // Operator approve payback from borrower
 void pen::apprpayback(uint64_t req_id) {}

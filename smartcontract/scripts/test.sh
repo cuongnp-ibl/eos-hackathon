@@ -29,7 +29,7 @@ cleos get table $SC_NAME $SC_NAME summary
 cleos get table $SC_NAME $SC_NAME loanreq
 cleos get table $SC_NAME $SC_NAME loan
 cleos get table $SC_NAME $SC_NAME donate
-cleos get table $SC_NAME $SC_NAME donate
+cleos get table $SC_NAME $SC_NAME paybackreq
 
 # Web API RPC
 
@@ -56,3 +56,7 @@ cleos get actions pen
 # curl  http://127.0.0.1:8888/v1/chain/abi_bin_to_json -X POST -d '{"code":"currency", "action":"transfer", "binargs":"000000008093dd74000000000094dd74e803000000000000"}'
 
 curl  http://127.0.0.1:8888/v1/history/get_actions -X POST -d '{"account_name":"pen"}'
+
+
+# Request payback
+cleos push action $SC_NAME addwhitelist '[2]' -p a.borrower

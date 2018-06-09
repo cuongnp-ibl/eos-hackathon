@@ -10,7 +10,7 @@ public:
   pen(account_name self)
       : contract(self), _tb_donate(_self, _self), _tb_whitelist(_self, _self),
         _tb_blacklist(_self, _self), _tb_summary(_self, _self), _tb_loan_req(_self, _self),
-        _tb_loan(_self, _self) {}
+        _tb_loan(_self, _self), _tb_payback_req(_self, _self) {}
 
   // @abi action
   void addwhitelist(account_name borrower, uint8_t score);
@@ -111,12 +111,26 @@ private:
 
   typedef multi_index<N(loan), loan_rec> loan_table;
 
+  //@abi table paybackreq
+  struct payback_req_rec {
+    uint64_t  id;
+    account_name borrower;
+    uint32_t quantity;
+
+    auto primary_key() const { return id; }
+
+    EOSLIB_SERIALIZE(payback_req_rec, (id)(borrower)(quantity))
+  };
+
+  typedef multi_index<N(paybackreq), payback_req_rec> payback_req_table;
+
   donate_table _tb_donate;
   whitelist_table _tb_whitelist;
   blacklist_table _tb_blacklist;
   summary_table _tb_summary;
   loan_request_table _tb_loan_req;
   loan_table _tb_loan;
+  payback_req_table _tb_payback_req;
 
   void require_whitelist(account_name name);
 };
