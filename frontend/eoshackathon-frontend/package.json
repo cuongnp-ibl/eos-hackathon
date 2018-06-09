@@ -1,0 +1,32 @@
+{
+  "name": "eoshackathon-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "^4.1.1",
+    "chart.js": "^1.1.1",
+    "history": "^4.7.2",
+    "qrcode.react": "^0.8.0",
+    "react": "^16.4.0",
+    "react-chartjs": "^1.2.0",
+    "react-dom": "^16.4.0",
+    "react-redux": "^5.0.7",
+    "react-responsive-carousel": "^3.1.39",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-router-redux": "^5.0.0-alpha.9",
+    "react-scripts": "1.1.4",
+    "react-slick": "^0.23.1",
+    "reactstrap": "^6.1.0",
+    "redux": "^4.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "redux-devtools-extension": "^2.13.2"
+  }
+}
