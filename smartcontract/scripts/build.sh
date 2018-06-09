@@ -1,7 +1,8 @@
 WP_DIR=..
+SC_NAME=pen
 
 echo Building ABI...
-eosiocpp -g $WP_DIR/donation.abi $WP_DIR/donation.hpp
+eosiocpp -g $WP_DIR/$SC_NAME.abi $WP_DIR/$SC_NAME.hpp
 
 echo Building WASM...
-eosiocpp -o $WP_DIR/donation.wast $WP_DIR/donation.cpp
+eosiocpp -o $WP_DIR/$SC_NAME.wast $WP_DIR/$SC_NAME.cpp

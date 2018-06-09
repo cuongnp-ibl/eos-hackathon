@@ -1,6 +1,7 @@
-#include "donation.hpp"
+#include "pen.hpp"
 
-void donation::addwhitelist(account_name borrower, uint8_t score) {
+// Add borrower to whitelist KYB
+void pen::addwhitelist(account_name borrower, uint8_t score) {
   require_auth(_self);
 
   auto itr_blacklist = _tb_blacklist.find(borrower);
@@ -17,7 +18,8 @@ void donation::addwhitelist(account_name borrower, uint8_t score) {
   });
 }
 
-void donation::delwhitelist(account_name borrower) {
+// Remove borrower from whitelist KYB
+void pen::delwhitelist(account_name borrower) {
   require_auth(_self);
 
   auto itr = _tb_whitelist.find(borrower);
@@ -33,7 +35,8 @@ void donation::delwhitelist(account_name borrower) {
   _tb_whitelist.erase(itr);
 }
 
-void donation::donate(account_name from, uint64_t quantity) {
+// issue token from donate
+void pen::donate(account_name from, uint64_t quantity) {
   auto itr_from = _tb_donate.find(from);
 
   if (itr_from == _tb_donate.end()) {
@@ -49,14 +52,23 @@ void donation::donate(account_name from, uint64_t quantity) {
   }
 }
 
-void donation::requestbor(account_name to, uint64_t quantity) {}
-
-void donation::approvebor(uint64_t req_id) {}
+// Borrower request to loan money
+void pen::reqloan(account_name to, uint64_t quantity) {}
+// Operator approve loan request from borrower
+void pen::apprloan(uint64_t req_id) {}
+// Operator deny loan request
+void pen::denyloan(uint64_t req_id) {}
+// Borrower request payback
+void pen::reqpayback(uint64_t req_id) {}
+// Operator approve payback from borrower
+void pen::apprpayback(uint64_t req_id) {}
+// Operator deny payback from borrower
+void pen::denypayback(uint64_t req_id) {}
 
 /**
  * Clear all table. For test only
  */
-void donation::cleartable(account_name to) {
+void pen::cleartable(account_name to) {
   require_auth(_self);
 
   auto itr1 = _tb_whitelist.begin();

@@ -4,10 +4,10 @@
 using namespace eosio;
 using namespace std;
 
-class donation : public contract {
+class pen : public contract {
 
 public:
-  donation(account_name self)
+  pen(account_name self)
       : contract(self), _tb_donate(_self, _self), _tb_whitelist(_self, _self),
         _tb_blacklist(_self, _self) {}
 
@@ -18,9 +18,17 @@ public:
   // @abi action
   void donate(account_name from, uint64_t quantity);
   // @abi action
-  void requestbor(account_name to, uint64_t quantity);
+  void reqloan(account_name to, uint64_t quantity);
   // @abi action
-  void approvebor(uint64_t req_id);
+  void apprloan(uint64_t req_id);
+  // @abi action
+  void denyloan(uint64_t req_id);
+  // @abi action
+  void reqpayback(uint64_t req_id);
+  // @abi action
+  void apprpayback(uint64_t req_id);
+  // @abi action
+  void denypayback(uint64_t req_id);
   // @abi action
   void cleartable(account_name to);
 
@@ -65,4 +73,4 @@ private:
   blacklist_table _tb_blacklist;
 };
 
-EOSIO_ABI(donation, (addwhitelist)(delwhitelist)(donate)(requestbor)(approvebor)(cleartable))
+EOSIO_ABI(pen, (addwhitelist)(delwhitelist)(donate)(reqloan)(apprloan)(denyloan)(reqpayback)(apprpayback)(denypayback)(cleartable))
