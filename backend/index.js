@@ -160,6 +160,26 @@ app.get('/api/admin/loan_req', (req, res) => {
   });
 });
 
+app.get('/api/admin/payback_req', (req, res) => {
+  var result = [];
+  eos.getTableRows({
+    json: "true",
+    code: "pen",
+    scope: "pen",
+    table: "paybackreq"
+  }).then((body) => {
+
+    if( body.rows && body.rows.length > 0) {
+      result = body.rows;
+    } 
+
+    res.send({
+      data: result
+    })
+
+  });
+});
+
 app.use(function(req, res, next) {
   res.status(404).send()
 })
