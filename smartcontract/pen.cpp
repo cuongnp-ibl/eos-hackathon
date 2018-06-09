@@ -53,22 +53,64 @@ void pen::donate(account_name from, uint64_t quantity) {
 }
 
 // Borrower request to loan money
-void pen::reqloan(account_name to, uint64_t quantity) {}
+void pen::reqloan(account_name borrower, uint64_t quantity) {
+  require_auth(borrower);
+
+  // Check whitelist
+  require_whitelist(borrower);
+
+  // TODO: check with remain
+
+  // Insert loan request
+  _tb_loan_req.emplace(_self, [&](auto &row) {
+    row.id = _tb_loan_req.available_primary_key();
+    row.borrower = borrower;
+    row.quantity = quantity;
+  });
+}
+
 // Operator approve loan request from borrower
-void pen::apprloan(uint64_t req_id) {}
+void pen::apprloan(uint64_t req_id) {
+  require_auth(_self);
+
+  auto itr_req = _tb_loan_req.find(req_id);
+  eosio_assert(itr_req != _tb_loan_req.end(), "Load request has not exist");
+
+  // Store to loan table
+  _tb_loan.emplace(_self, [&](auto &row) {
+    row.id = itr_req->id;
+    row.borrower = itr_req->borrower;
+    row.quantity = itr_req->quantity;
+  });
+
+  // Remove loan request
+  _tb_loan_req.erase(itr_req);
+}
+
 // Operator deny loan request
-void pen::denyloan(uint64_t req_id) {}
+void pen::denyloan(uint64_t req_id) {
+  require_auth(_self);
+
+  auto itr = _tb_loan_req.find(req_id);
+  eosio_assert(itr != _tb_loan_req.end(), "Load request has not exist");
+
+  // Remove loan request
+  _tb_loan_req.erase(itr);
+}
+
 // Borrower request payback
 void pen::reqpayback(uint64_t req_id) {}
+
 // Operator approve payback from borrower
 void pen::apprpayback(uint64_t req_id) {}
+
 // Operator deny payback from borrower
 void pen::denypayback(uint64_t req_id) {}
 
 /**
  * Clear all table. For test only
  */
-void pen::cleartable(account_name to) {
+void pen::cleartable(string type) {
   require_auth(_self);
 
   auto itr1 = _tb_whitelist.begin();
@@ -88,4 +130,21 @@ void pen::cleartable(account_name to) {
     _tb_donate.erase(itr3);
     itr3 = _tb_donate.begin();
   }
+
+  auto itr4 = _tb_summary.begin();
+  while (itr4 != _tb_summary.end()) {
+    _tb_summary.erase(itr4);
+    itr4 = _tb_summary.begin();
+  }
+
+  auto itr5 = _tb_loan_req.begin();
+  while (itr5 != _tb_loan_req.end()) {
+    _tb_loan_req.erase(itr5);
+    itr5 = _tb_loan_req.begin();
+  }
+}
+
+void pen::require_whitelist(account_name name) {
+  auto itr = _tb_whitelist.find(name);
+  eosio_assert(itr != _tb_whitelist.end(), "Account has not exists in whitelist");
 }

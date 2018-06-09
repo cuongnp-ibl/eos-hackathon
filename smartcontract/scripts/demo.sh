@@ -1,4 +1,24 @@
 # =============================================================================
+# Run fullnode
+nodeos -e -p eosio \
+  --plugin eosio::chain_api_plugin \
+  --plugin eosio::history_api_plugin \
+  --plugin eosio::wallet_api_plugin \
+  --wallet-dir . \
+  --signature-provider EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV=KEY:5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3 \
+  --http-server-address=0.0.0.0:8888 \
+  --filter-on pen:addwhitelist: \
+  --filter-on pen:delwhitelist: \
+  --filter-on pen:donate: \
+  --filter-on pen:reqloan: \
+  --filter-on pen:apprloan: \
+  --filter-on pen:denyloan: \
+  --filter-on pen:reqpayback: \
+  --filter-on pen:apprpayback: \
+  --filter-on pen:denypayback: \
+  --contracts-console 
+
+# =============================================================================
 # Deploy smart contract
 PASSWORD=PW5Jn7QbGQ4eVz8oYXSxAgQEYG7CPcB4RqNcbA7MK9vk3Gxnb4FGh
 PUBKEY=EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
@@ -83,4 +103,5 @@ cleos get table pen pen whitelist
 cleos get table pen pen blacklist
 
 cleos push action pen delwhitelist '["b.borrower"]' -p pen
+
 
