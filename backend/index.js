@@ -86,8 +86,8 @@ app.get('/api/token-status', (req, res) => {
   var result = {
     "currentLending": 0,
     "availabe": 0,
-    "total_donate": 0,
-    "total_payback": 0
+    "totalDonate": 0,
+    "totalPayback": 0
   };
 
   eos.getTableRows({
@@ -100,8 +100,8 @@ app.get('/api/token-status', (req, res) => {
     if( body.rows || body.rows.length == 1) {
       var summary = body.rows[0];
       result.currentLending = summary.loan;
-      result.total_donate = summary.donate;
-      result.total_payback = summary.payback;
+      result.totalDonate = summary.donate;
+      result.totalPayback = summary.payback;
       result.availabe = summary.remain;
       //   { id: 1,
       //     donate: 1400,
