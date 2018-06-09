@@ -3,10 +3,13 @@
 void donation::addwhitelist(account_name borrower, uint8_t score) {
   require_auth( _self );
 
-  auto itr = _tb_whitelist.find(borrower);
-  eosio_assert(itr == _tb_whitelist.end(), "Account has been exists");
+  auto itr_blacklist = _tb_blacklist.find(borrower);
+  eosio_assert(itr_blacklist == _tb_blacklist.end(), "Account has been exists in blacklist");
 
-  // add donor to whitelist KYC
+  auto itr_whitelist = _tb_whitelist.find(borrower);
+  eosio_assert(itr_whitelist == _tb_whitelist.end(), "Account has been exists");
+
+  // add borrower to whitelist KYB
   _tb_whitelist.emplace(_self, [&](auto& row) {
     row.borrower = borrower;
     row.score = score;
@@ -18,6 +21,12 @@ void donation::delwhitelist(account_name borrower) {
 
   auto itr = _tb_whitelist.find(borrower);
   eosio_assert(itr != _tb_whitelist.end(), "Account has not exists");
+
+  // add borrower to blacklist KYB
+  _tb_blacklist.emplace(_self, [&](auto& row) {
+    row.borrower = borrower;
+    row.score = itr->score;
+  });
 
   // remove borrower from whitelist
   _tb_whitelist.erase(itr);
