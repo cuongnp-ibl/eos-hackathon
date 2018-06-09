@@ -97,7 +97,7 @@ app.get('/api/token-status', (req, res) => {
     table: "summary"
   }).then((body) => {
 
-    if( body.rows || body.rows.length == 1) {
+    if( body.rows && body.rows.length == 1) {
       var summary = body.rows[0];
       result.currentLending = summary.loan;
       result.totalDonate = summary.donate;
@@ -119,6 +119,27 @@ app.get('/api/token-status', (req, res) => {
   });
   
 });
+
+app.get('/api/admin/loans', (req, res) => {
+  var result = [];
+  eos.getTableRows({
+    json: "true",
+    code: "pen",
+    scope: "pen",
+    table: "loan"
+  }).then((body) => {
+
+    if( body.rows && body.rows.length > 0) {
+      result = body.rows;
+    } 
+
+    res.send({
+      data: result
+    })
+
+  });
+});
+
 
 app.use(function(req, res, next) {
   res.status(404).send()
@@ -145,11 +166,6 @@ raw.init()
   .then(() => {
     app.listen(config.port, () => {
       logger.info(`Server listening at ${config.port}`);
-console.log('eos', eos)
-console.log('getTableRows:', eos.getTableRows())
-
-  
-
       // FOR TEST ONLY
       // console.log('create');
       // raw.createTx({from: "sontt", quantity: 100}, (err, res) => {
