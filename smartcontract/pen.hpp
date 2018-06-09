@@ -17,7 +17,7 @@ public:
   // @abi action
   void delwhitelist(account_name borrower);
   // @abi action
-  void donate(account_name from, uint64_t quantity);
+  void issue(account_name from, uint64_t quantity);
   // @abi action
   void reqloan(account_name borrower, uint64_t quantity);
   // @abi action
@@ -135,4 +135,4 @@ private:
   void require_whitelist(account_name name);
 };
 
-EOSIO_ABI(pen, (addwhitelist)(delwhitelist)(donate)(reqloan)(apprloan)(denyloan)(reqpayback)(apprpayback)(denypayback)(cleartable))
+EOSIO_ABI(pen, (addwhitelist)(delwhitelist)(issue)(reqloan)(apprloan)(denyloan)(reqpayback)(apprpayback)(denypayback)(cleartable))

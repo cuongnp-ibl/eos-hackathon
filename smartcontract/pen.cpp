@@ -36,7 +36,7 @@ void pen::delwhitelist(account_name borrower) {
 }
 
 // issue token from donate
-void pen::donate(account_name from, uint64_t quantity) {
+void pen::issue(account_name from, uint64_t quantity) {
   auto itr_from = _tb_donate.find(from);
 
   if (itr_from == _tb_donate.end()) {
@@ -74,7 +74,7 @@ void pen::apprloan(uint64_t req_id) {
   require_auth(_self);
 
   auto itr_req = _tb_loan_req.find(req_id);
-  eosio_assert(itr_req != _tb_loan_req.end(), "Load request has not exist");
+  eosio_assert(itr_req != _tb_loan_req.end(), "Loan request has not exist");
 
   // Store to loan table
   _tb_loan.emplace(_self, [&](auto &row) {
@@ -92,7 +92,7 @@ void pen::denyloan(uint64_t req_id) {
   require_auth(_self);
 
   auto itr = _tb_loan_req.find(req_id);
-  eosio_assert(itr != _tb_loan_req.end(), "Load request has not exist");
+  eosio_assert(itr != _tb_loan_req.end(), "Loan request has not exist");
 
   // Remove loan request
   _tb_loan_req.erase(itr);
@@ -101,7 +101,7 @@ void pen::denyloan(uint64_t req_id) {
 // Borrower request payback
 void pen::reqpayback(uint64_t req_id) {
   auto itr = _tb_loan.find(req_id);
-  eosio_assert(itr != _tb_loan.end(), "Load has not exist");
+  eosio_assert(itr != _tb_loan.end(), "Loan has not exist");
 
   require_auth(itr->borrower);
 
@@ -114,10 +114,33 @@ void pen::reqpayback(uint64_t req_id) {
 }
 
 // Operator approve payback from borrower
-void pen::apprpayback(uint64_t req_id) {}
+void pen::apprpayback(uint64_t req_id) {
+  require_auth(_self);
+
+  auto itr_req = _tb_payback_req.find(req_id);
+  eosio_assert(itr_req != _tb_payback_req.end(),
+               "Payback request has not exist");
+
+  // Remove payback request
+  _tb_payback_req.erase(itr_req);
+
+  auto itr_req_loan = _tb_loan.find(req_id);
+  eosio_assert(itr_req_loan != _tb_loan.end(), "Loan has not exist");
+
+  // Remove loan request
+  _tb_loan.erase(itr_req_loan);
+}
 
 // Operator deny payback from borrower
-void pen::denypayback(uint64_t req_id) {}
+void pen::denypayback(uint64_t req_id) {
+  require_auth(_self);
+
+  auto itr = _tb_payback_req.find(req_id);
+  eosio_assert(itr != _tb_payback_req.end(), "Payback request has not exist");
+
+  // Remove loan request
+  _tb_payback_req.erase(itr);
+}
 
 /**
  * Clear all table. For test only
@@ -158,5 +181,6 @@ void pen::cleartable(string type) {
 
 void pen::require_whitelist(account_name name) {
   auto itr = _tb_whitelist.find(name);
-  eosio_assert(itr != _tb_whitelist.end(), "Account has not exists in whitelist");
+  eosio_assert(itr != _tb_whitelist.end(),
+               "Account has not exists in whitelist");
 }

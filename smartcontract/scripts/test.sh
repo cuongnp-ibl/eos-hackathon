@@ -12,9 +12,9 @@ cleos get table $SC_NAME $SC_NAME whitelist
 cleos get table $SC_NAME $SC_NAME blacklist
 
 # donate
-cleos push action $SC_NAME donate '["inita", 10]' -p $SC_NAME
-cleos push action $SC_NAME donate '["initb", 15]' -p $SC_NAME
-cleos push action $SC_NAME donate '["initc", 20]' -p $SC_NAME
+cleos push action $SC_NAME issue '["inita", 10]' -p $SC_NAME
+cleos push action $SC_NAME issue '["initb", 15]' -p $SC_NAME
+cleos push action $SC_NAME issue '["initc", 20]' -p $SC_NAME
 
 # get table
 cleos get table $SC_NAME $SC_NAME donate
@@ -59,4 +59,47 @@ curl  http://127.0.0.1:8888/v1/history/get_actions -X POST -d '{"account_name":"
 
 
 # Request payback
-cleos push action $SC_NAME addwhitelist '[2]' -p a.borrower
+cleos push action $SC_NAME reqpayback '[2]' -p a.borrower
+
+# Deny payback
+cleos push action $SC_NAME denypayback '[2]' -p pen
+
+
+# =============================================================================
+# Scenario
+
+# Regis KYC
+cleos push action $SC_NAME addwhitelist '["a.borrower"]' -p pen
+cleos push action $SC_NAME addwhitelist '["b.borrower"]' -p pen
+
+# check KYC
+cleos get table $SC_NAME $SC_NAME whitelist
+
+# Issue token from donate
+cleos push action $SC_NAME issue '["a.donor", 1000]' -p $SC_NAME
+
+# Check donate table
+cleos get table $SC_NAME $SC_NAME donate
+
+# Request borrow
+cleos push action $SC_NAME reqloan '["a.borrower", 20]' -p a.borrower
+
+# Check loan request table
+cleos get table $SC_NAME $SC_NAME loanreq
+
+# Approve loan request
+cleos push action $SC_NAME apprloan '[1]' -p pen
+
+# Check loan request table
+cleos get table $SC_NAME $SC_NAME loanreq
+cleos get table $SC_NAME $SC_NAME loan
+
+# Request payback 
+cleos push action $SC_NAME reqpayback '[2]' -p a.borrower
+
+# Check payback request table
+cleos get table $SC_NAME $SC_NAME paybackreq
+
+# Approge payback
+cleos push action $SC_NAME apprpayback '[2]' -p pen
+
