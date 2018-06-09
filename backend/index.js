@@ -8,6 +8,8 @@ const config             = require('modules/config')
 const logger             = require('modules/logger')
 const mongooseConnection = require('modules/mongoose-connection')
 
+const raw = require('modules/rawTransaction');
+
 const app = express()
 
 app.use(cookieParser())
@@ -38,24 +40,31 @@ app.get('/api/donation-history', (req, res) => {
 
 app.post('/api/amdin/issue-token', (req, res) => {
   // returns Promise
-  eos.transaction({
-    actions: [
-      {
-        account: 'pen',
-        name: 'issue',
-        authorization: [{
-          actor: 'pen',
-          permission: 'active'
-        }],
-        data: {
-          from: 'inita',
-          to: 'initb',
-          quantity: '7 SYS',
-          memo: ''
-        }
-      }
-    ]
-  })
+  // eos.transaction({
+  //   actions: [
+  //     {
+  //       account: 'pen',
+  //       name: 'issue',
+  //       authorization: [{
+  //         actor: 'pen',
+  //         permission: 'active'
+  //       }],
+  //       data: {
+  //         from: 'inita',
+  //         to: 'initb',
+  //         quantity: '7 SYS',
+  //         memo: ''
+  //       }
+  //     }
+  //   ]
+  // })
+
+  var action = {
+        "account": "pen",
+        "name": "issue",
+        "authorization": [{ "actor": "pen", "permission": "active" }],
+        "data": data
+      };
 })
 
 app.post('/api/request-borrow', (req, res) => {
@@ -93,8 +102,6 @@ const mongooseOptions = {
 
 mongooseConnection.connect(config.mongoUri, mongooseOptions)
 
-const raw = require('modules/rawTransaction');
-
 raw.init()
   .then(() => {
     app.listen(config.port, () => {
@@ -103,6 +110,22 @@ raw.init()
       // FOR TEST ONLY
       // console.log('create');
       // raw.createTx({from: "sontt", quantity: 100}, (err, res) => {
+
+      //   rawTx = raw.signTx("5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3", res);
+      //   console.log('rawTx :', rawTx);
+      //   raw.sendRawTx(JSON.stringify(rawTx), (err, res) => {
+      //     console.log("sendRawTx", err, res);
+      //   });
+
+      // })
+
+      // var action = {
+      //   "account": "pen",
+      //   "name": "issue",
+      //   "authorization": [{ "actor": "pen", "permission": "active" }],
+      //   "data": {from: "sontt", quantity: 100}
+      // }
+      // raw.createTx(action, (err, res) => {
 
       //   rawTx = raw.signTx("5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3", res);
       //   console.log('rawTx :', rawTx);

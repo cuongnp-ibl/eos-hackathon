@@ -89,14 +89,16 @@ class RawService {
                 "transaction_extensions": []
               };
 
-              txObject.actions.push(
-                {
-                  "account": "pen",
-                  "name": "issue",
-                  "authorization": [{ "actor": "pen", "permission": "active" }],
-                  "data": data
-                }
-              )
+              // txObject.actions.push(
+              //   {
+              //     "account": "pen",
+              //     "name": "issue",
+              //     "authorization": [{ "actor": "pen", "permission": "active" }],
+              //     "data": data
+              //   }
+              // )
+
+              txObject.actions.push(data);
 
               var _Structs = Structs(self.config);
               var structs = _Structs.structs;
