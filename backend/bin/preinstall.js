@@ -17,7 +17,7 @@ fs.readdirSync(moduleDirectory)
 
 // Symlink the `modules` director to the root of node_modules -- make it the easy way require
 if(!fs.existsSync('./node_modules/modules')){
-  childProcess.exec('mkdir -p node_modules & cd node_modules && ln -sf ../modules modules', (error, stdout, stderr) => {
+  childProcess.exec('mkdir -p node_modules & cd node_modules && ln -sf ../modules ./modules', (error, stdout, stderr) => {
     if (error) {
       console.error(`PreInstall exec error: ${error}`);
       return;
