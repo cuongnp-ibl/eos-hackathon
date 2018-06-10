@@ -3,6 +3,8 @@ import QRCode from 'qrcode.react'
 
 class DonationInfo extends Component {
   render () {
+    const { tokenStatus } = this.props
+
     return (
       <div className='row'>
         <div className='inf-section'>
@@ -77,7 +79,7 @@ class DonationInfo extends Component {
                   padding: 10
                 }}
               >
-                Total lending/Total token:  1000 / 100000
+                Total lending/Total availabe:  {tokenStatus.currentLending} / {tokenStatus.availabe}
               </div>
             </div>
           </div>

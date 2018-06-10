@@ -45,8 +45,16 @@ const chartOptions = {
 }
 
 class Charts extends Component {
+  componentDidMount () {
+    const { getTokenStatus } = this.props
+
+    getTokenStatus()
+  }
+
   render () {
     const { tokenStatus } = this.props
+    chartData[0].value = tokenStatus.currentLending
+    chartData[1].value = tokenStatus.availabe
 
     return (
       <div className='row'>

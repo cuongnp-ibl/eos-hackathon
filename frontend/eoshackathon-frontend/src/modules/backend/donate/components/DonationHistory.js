@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Button } from 'reactstrap'
+import { DONATION_STATUS } from '../../../../common/config'
 
 const donationHistoryItem = ({item, index, issueDonation}) => (
   <div className='inf-home-donation-history-item' key={index}>
@@ -15,15 +16,19 @@ const donationHistoryItem = ({item, index, issueDonation}) => (
       tx: {item.tx_id || '...'}
     </div>
     <div style={{ position: 'absolute', top: 10, right: 0 }}>
-      {item.status === 'NEW' ? <Button onClick={() => issueDonation(item._id)} color='danger'>ISSUE</Button> : item.status}
+      {item.status === 'NEW'
+        ? <Button onClick={() => issueDonation(item._id)} color='danger'>ISSUE</Button>
+        : <span className={`badge badge-pill ${DONATION_STATUS[item.status]}`}>{item.status}</span>
+      }
     </div>
   </div>
 )
 
 class DonationHistory extends Component {
   componentDidMount () {
-    const { getBorrowHistory } = this.props
+    const { getBorrowHistory, getTokenStatus } = this.props
     getBorrowHistory()
+    getTokenStatus()
   }
 
   render () {

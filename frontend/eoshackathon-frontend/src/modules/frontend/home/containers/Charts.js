@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { axios } from 'axios'
+import axios from 'axios'
 import Charts from '../components/Charts'
 import { MODULE_NAME } from '../model'
 import { BASE_URL } from '../../../../common/config'
@@ -11,7 +11,7 @@ const mapDispatchToProps = (dispatch, props) => ({
       const url = `${BASE_URL}/token-status`
       const response = await axios({ url })
       if (response && response.data) {
-        dispatch(getTokenStatus(response.data))
+        dispatch(getTokenStatus(response.data.data))
       }
       return true
     } catch (e) {

@@ -1,6 +1,7 @@
 import { handleActions } from 'redux-actions'
 
 import * as actions from './actions'
+import { Object } from 'core-js'
 
 const defaultState = {
   tokenStatus: {
@@ -53,7 +54,7 @@ const handlers = {
   }),
   [actions.getTokenStatus]: (state, action) => ({
     ...state,
-    ...{ tokenStatus: action.payload }
+    ...{ tokenStatus: Object.assign({}, action.payload) }
   })
 }
 
