@@ -60,6 +60,7 @@ cleos transfer a.donor pen '123 EOS' 'test 3'
 
 cleos transfer b.donor pen '80 EOS' 'test 3'
 
+cleos push action eosio.token issue '{"to":"a.donor", "quantity": "5000.0000 EOS", "memo": ""}' -p eosio.token@active
 cleos push action eosio.token issue '{"to":"b.donor", "quantity": "5000.0000 EOS", "memo": ""}' -p eosio.token@active
 
 
@@ -71,3 +72,21 @@ cleos push action eosio.token issue '{"to":"b.donor", "quantity": "5000.0000 EOS
 # Private key: 5KNhKD3vaipEckyFjF3QVZvHZb3LbcCMLoWNE8jWvXxTGg6PoDF
 # Public key: EOS6w4zLcrLGwQboyoaDYMcBRzRHpZzv69NKtqCb8HrkpoSnPhsNV
 
+# a.borrower
+# Private key: 5K39gpQF9ncqcjujQUGUu33L6BVmphAwKtjsqpT5wEaw1TsWkJk
+# Public key: EOS5wrNMdhG5WYRrYphdy1r2HSXmqDKq5SiavcQ7pYHfV92E9rSug
+
+# b.borrower
+# Private key: 5KTTpF7zY5DK7DrdtgvHY4LJ6D2rExXTbjF2QRGVweCJuBUYuAY
+# Public key: EOS4tWnGtCbuTi2YBXpSzeoiTVYG6xMqrJd5LKi336TAH1YvKAnWV
+
+# Admin:
+# http://localhost:3000/admin/donate-management
+# http://localhost:3000/admin/borrow-management
+
+# Frontend:
+# http://localhost:3000/
+# http://localhost:3000/login
+# http://localhost:3000/user/borrow
+
+bob@pen.com
