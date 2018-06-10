@@ -46,7 +46,6 @@ app.get('/api/donation-history', (req, res) => {
 
 app.post('/api/admin/issue-token', (req, res) => {
   var id = req.body.id;
-  console.log('id :', id);
   Donation.findOne({"_id": id}, (err, item) => {
     console.log('item :', item);
     if( item != null ) {
@@ -70,16 +69,59 @@ app.post('/api/admin/issue-token', (req, res) => {
   
 })
 
-app.post('/api/request-borrow', (req, res) => {
+app.post('/api/send', (req, res) => {
+  var rawtx = req.body.rawtx;
+  raw.sendRawTx(JSON.stringify(rawTx), (err, txRes) => {
+    console.log("sendRawTx", err, txRes);
+    res.send({cd: 0, data: txRes});
+  });
+})
 
-  res.send('OK')
+app.post('/api/request-borrow', (req, res) => {
+  var acc_name = req.body.name;
+  var quantity = req.body.quantity;
+
+  var action = {
+    "account": "pen",
+    "name": "reqloan",
+    "authorization": [{ "actor": acc_name, "permission": "active" }],
+    "data": { borrower: acc_name, quantity: parseInt(quantity)}
+  };
+
+  raw.createTx(action, (err, txRes) => {
+    res.send({data: txRes});
+    // rawTx = raw.signTx("5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3", txRes);
+    // console.log('rawTx :', rawTx);
+    // raw.sendRawTx(JSON.stringify(rawTx), (err, txRes) => {
+    //   console.log("sendRawTx", err, txRes);
+    // });
+  });
+
+  // res.send('OK')
+});
+
+app.post('/api/admin/approve-request-borrow', (req, res) => {
+  var id = req.body.id;
+
+  var action = {
+    "account": "pen",
+    "name": "apprloan",
+    "authorization": [{ "actor": "pen", "permission": "active" }],
+    "data": { req_id: parseInt(id)}
+  };
+  raw.createTx(action, (err, txRes) => {
+    rawTx = raw.signTx("5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3", txRes);
+    console.log('rawTx :', rawTx);
+    raw.sendRawTx(JSON.stringify(rawTx), (err, txRes) => {
+      console.log("sendRawTx", err, txRes);
+    });
+  });
+
+  res.send({cd: 0})
+  
 })
 
 app.post('/api/sign-borrow-request', (req, res) => {
-
-})
-
-app.post('/api/admin/approve-borrow-request', (req, res) => {
 
 })
 
