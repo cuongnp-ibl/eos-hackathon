@@ -10,6 +10,7 @@
   "scripts": {
     "preinstall": "node bin/preinstall.js",
     "dev": "NODE_PATH=. NODE_ENV=development nodemon",
+    "batch": "NODE_PATH=. NODE_ENV=development nodemon batch.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -22,6 +23,7 @@
     "express-session": "^1.15.6",
     "fcbuffer": "^2.2.0",
     "mongoose": "^5.1.4",
+    "mongoose-auto-increment": "^5.0.1",
     "request": "^2.87.0"
   },
   "devDependencies": {

@@ -8,6 +8,7 @@ const eos                = require('modules/eos')
 const config             = require('modules/config')
 const logger             = require('modules/logger')
 const mongooseConnection = require('modules/mongoose-connection')
+const Donation = require('modules/models/donation.js')
 
 const raw = require('modules/rawTransaction');
 
@@ -28,6 +29,10 @@ app.use(session({
   },
   store: new session.MemoryStore()
 }))
+app.use(express.json({
+  limit: '100mb',
+  strict: true
+}))
 
 app.get('/ping', function(req, res) {
   return res.send('ok');
@@ -39,33 +44,30 @@ app.get('/api/donation-history', (req, res) => {
 })
 
 
-app.post('/api/amdin/issue-token', (req, res) => {
-  // returns Promise
-  // eos.transaction({
-  //   actions: [
-  //     {
-  //       account: 'pen',
-  //       name: 'issue',
-  //       authorization: [{
-  //         actor: 'pen',
-  //         permission: 'active'
-  //       }],
-  //       data: {
-  //         from: 'inita',
-  //         to: 'initb',
-  //         quantity: '7 SYS',
-  //         memo: ''
-  //       }
-  //     }
-  //   ]
-  // })
-
-  var action = {
+app.post('/api/admin/issue-token', (req, res) => {
+  var id = req.body.id;
+  console.log('id :', id);
+  Donation.findOne({"_id": id}, (err, item) => {
+    console.log('item :', item);
+    if( item != null ) {
+      var action = {
         "account": "pen",
         "name": "issue",
         "authorization": [{ "actor": "pen", "permission": "active" }],
-        "data": data
+        "data": { from: item.from, quantity: parseInt(item.token)}
       };
+      raw.createTx(action, (err, txRes) => {
+        rawTx = raw.signTx("5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3", txRes);
+        console.log('rawTx :', rawTx);
+        raw.sendRawTx(JSON.stringify(rawTx), (err, txRes) => {
+          console.log("sendRawTx", err, txRes);
+        });
+      });
+    }
+
+    res.send({cd: 0})
+  });
+  
 })
 
 app.post('/api/request-borrow', (req, res) => {
@@ -178,6 +180,16 @@ app.get('/api/admin/payback_req', (req, res) => {
     })
 
   });
+});
+
+app.get('/api/admin/donations', (req, res) => {
+  console.log('asdfsadf');
+  Donation.find({}, (err, items) => {
+    console.log(err, items)
+    res.send({
+      data: items
+    })
+  })
 });
 
 app.use(function(req, res, next) {
