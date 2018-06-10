@@ -183,7 +183,7 @@ app.get('/api/token-status', (req, res) => {
       result.currentLending = summary.loan;
       result.totalDonate = summary.donate;
       result.totalPayback = summary.payback;
-      result.availabe = summary.remain;
+      result.availabe = summary.donate - summary.loan + summary.payback;
       //   { id: 1,
       //     donate: 1400,
       //     payback: 100,
