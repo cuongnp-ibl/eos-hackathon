@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Text, TextArea, Radio, RadioGroup, Select, Checkbox } from 'react-form'
+import { Form, Text, Select } from 'react-form'
 
 const statusOptions = [
   {
@@ -17,11 +17,13 @@ const statusOptions = [
 ]
 class BorrowForm extends Component {
   render () {
+    const { user, postBorrow } = this.props
+
     return (
       <div className='row'>
         <div className='inf-section col-md-12'>
           <h4>Borrow</h4>
-          <Form onSubmit={submittedValues => console.warn(JSON.stringify(submittedValues))}>
+          <Form onSubmit={submittedValues => postBorrow(submittedValues, user)}>
             {formApi => (
               <form onSubmit={formApi.submitForm} id='userBorrow'>
                 <div className='row'>
