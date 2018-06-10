@@ -6,6 +6,7 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.1.1",
     "chart.js": "^1.1.1",
+    "eosjs-ecc": "^4.0.1",
     "history": "^4.7.2",
     "moment": "^2.22.2",
     "momentjs": "^2.0.0",

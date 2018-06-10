@@ -3,22 +3,9 @@ import { handleActions } from 'redux-actions'
 import * as actions from './actions'
 
 const defaultState = {
-  borrowHistory: [{
-    amount: 1000,
-    start: 1528530221618,
-    end: 1528530221618,
-    status: 'INREVIEW' // INREVIEW, BORROWING, BACK, OVER
-  }, {
-    amount: 1000,
-    start: 1528530221618,
-    end: 1528530221618,
-    status: 'BORROWING' // INREVIEW, BORROWING, BACK, OVER
-  }, {
-    amount: 1000,
-    start: 1528530221618,
-    end: 1528530221618,
-    status: 'BACK' // INREVIEW, BORROWING, BACK, OVER
-  } ]
+  borrowHistory: [
+    {'id': 1, 'borrower': 'a.borrower', 'quantity': 3}
+  ]
 }
 
 const handlers = {

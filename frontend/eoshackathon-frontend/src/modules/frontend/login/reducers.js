@@ -4,17 +4,14 @@ import * as actions from './actions'
 
 const defaultState = {
   user: {
-    'userId': 123,
-    'level': 1, // 2, 3,...
-    'userName': 'trieucuong',
-    'score': 100
+    '_id': '5b1c79b503f07210e0bb8974', 'email': 'bob@pen.com', 'eosAccountName': 'a.borrower'
   }
 }
 
 const handlers = {
   [actions.login]: (state, action) => ({
     ...state,
-    ...{ user: action.payload }
+    ...{ user: Object.assign({}, action.payload) }
   })
 }
 

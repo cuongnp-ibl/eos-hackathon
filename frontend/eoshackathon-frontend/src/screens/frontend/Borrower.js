@@ -10,7 +10,7 @@ class Borrow extends Component {
       <FrontEndTemplate>
         <Title title='Borrow Management' />
         <BorrowForm />
-        <BorrowHistory />
+        {/* <BorrowHistory /> */}
       </FrontEndTemplate>
     )
   }
