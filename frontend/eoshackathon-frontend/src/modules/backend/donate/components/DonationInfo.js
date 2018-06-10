@@ -64,6 +64,23 @@ class DonationInfo extends Component {
               </div>
             </div>
           </div>
+          <div className='row'>
+            <div className='col-md-12'>
+              <div
+                style={{
+                  borderWidth: 1,
+                  borderColor: '#D3D3D3',
+                  borderStyle: 'solid',
+                  backgroundColor: 'white',
+                  borderRadius: 4,
+                  marginTop: 20,
+                  padding: 10
+                }}
+              >
+                Total lending/Total token:  1000 / 100000
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )

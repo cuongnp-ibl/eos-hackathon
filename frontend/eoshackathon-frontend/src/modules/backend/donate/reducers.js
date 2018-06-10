@@ -22,7 +22,7 @@ const defaultState = {
 }
 
 const handlers = {
-  [actions.getDonateHistory]: (state, action) => ({
+  [actions.getDonationHistory]: (state, action) => ({
     ...state,
     ...{ donateHistory: action.payload }
   })

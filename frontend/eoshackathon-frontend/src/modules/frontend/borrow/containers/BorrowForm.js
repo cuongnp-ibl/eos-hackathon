@@ -5,7 +5,7 @@ import { BASE_URL } from '../../../../common/config'
 import { postBorrow } from '../actions'
 
 const mapDispatchToProps = (dispatch, props) => ({
-  postBorrow: async () => {
+  postBorrow: async (data) => {
     try {
       const getTransactionUrl = `${BASE_URL}/user-borrow-get-transaction`
       const getBroadcashUrl = `${BASE_URL}/user-borrow-broadcash`
