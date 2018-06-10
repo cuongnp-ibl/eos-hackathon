@@ -47,3 +47,4 @@ cleos push action $SC_NAME apprpayback '[0]' -p pen
 cleos get table $SC_NAME $SC_NAME paybackreq
 cleos get table $SC_NAME $SC_NAME summary
 
+cleos transfer a.borrower pen '100 EOS' 'test 3'
