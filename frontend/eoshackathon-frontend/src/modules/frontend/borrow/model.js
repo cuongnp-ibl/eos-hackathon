@@ -1,1 +1,1 @@
-export const MODULE_NAME = 'BORROW'
+export const MODULE_NAME = 'USER_BORROW'

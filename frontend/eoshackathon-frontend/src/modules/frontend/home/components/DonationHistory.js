@@ -27,7 +27,7 @@ const donationHistoryItem = ({item, index}) => (
       </div>
     </div>
     <div style={{ width: 70 }}>
-      {item.status === 'inreview' ? <span class='badge badge-pill badge-warning'>in-review</span> : <span class='badge badge-pill badge-primary'>success</span>}
+      {item.status === 'inreview' ? <span className='badge badge-pill badge-warning'>in-review</span> : <span className='badge badge-pill badge-primary'>success</span>}
     </div>
   </div>
 )

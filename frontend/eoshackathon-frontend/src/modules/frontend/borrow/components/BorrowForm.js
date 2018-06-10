@@ -1,32 +1,53 @@
 import React, { Component } from 'react'
+import { Form, Text, TextArea, Radio, RadioGroup, Select, Checkbox } from 'react-form'
 
+const statusOptions = [
+  {
+    label: '90 days',
+    value: '1'
+  },
+  {
+    label: '120 days',
+    value: '2'
+  },
+  {
+    label: '180 days',
+    value: '3'
+  }
+]
 class BorrowForm extends Component {
   render () {
     return (
       <div className='row'>
         <div className='inf-section col-md-12'>
           <h4>Borrow</h4>
-          <form>
-            <div className='row'>
-              <div className='col-md-6'>
-                <div className='form-group'>
-                  <label for='exampleInputEmail1'>Amount</label>
-                  <input type='email' className='form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Amount' />
+          <Form onSubmit={submittedValues => console.warn(JSON.stringify(submittedValues))}>
+            {formApi => (
+              <form onSubmit={formApi.submitForm} id='userBorrow'>
+                <div className='row'>
+                  <div className='col-md-6'>
+                    <div className='form-group'>
+                      <label htmlFor='amount'>Amount</label>
+                      <Text field='amount' id='amount' className='form-control' />
+                    </div>
+                  </div>
+                  <div className='col-md-6'>
+                    <div className='form-group'>
+                      <label htmlFor='exampleInputEmail1'>Package</label>
+                      <Select field='package' id='package' options={statusOptions} className='form-control mb-4' />
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className='col-md-6'>
                 <div className='form-group'>
-                  <label for='exampleInputEmail1'>Package</label>
-                  <input type='email' className='form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter Last Name' />
+                  <label htmlFor='privateKey'>Private Key</label>
+                  <Text className='form-control' field='privateKey' id='privateKey' />
                 </div>
-              </div>
-            </div>
-            <div className='form-group'>
-              <label for='exampleInputPassword1'>Private Key</label>
-              <input type='password' className='form-control' id='exampleInputPassword1' placeholder='Enter PrivateKey' />
-            </div>
-            <button type='submit' className='btn btn-primary'>Submit</button>
-          </form>
+                <button type='submit' className='mb-4 btn btn-primary'>
+                  Submit
+                </button>
+              </form>
+            )}
+          </Form>
         </div>
       </div>
     )

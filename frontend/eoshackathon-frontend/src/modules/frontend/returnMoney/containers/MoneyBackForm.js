@@ -1,11 +1,11 @@
 import { connect } from 'react-redux'
 import { axios } from 'axios'
-import BorrowForm from '../components/BorrowForm'
+import BorrowForm from '../components/MoneyBackForm'
 import { BASE_URL } from '../../../../common/config'
 import { postBorrow } from '../actions'
 
 const mapDispatchToProps = (dispatch, props) => ({
-  postBorrow: async (data) => {
+  postBorrow: async () => {
     try {
       const getTransactionUrl = `${BASE_URL}/user-borrow-get-transaction`
       const getBroadcashUrl = `${BASE_URL}/user-borrow-broadcash`
