@@ -7,12 +7,12 @@ class Charts extends Component {
         <div className='inf-section col-md-12'>
           <form>
             <div className='form-group'>
-              <label for='exampleInputEmail1'>Email address</label>
+              <label htmlFor='exampleInputEmail1'>Email address</label>
               <input type='email' className='form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter email' />
             </div>
             <div className='form-group'>
-              <label for='exampleInputEmail1'>Password</label>
-              <input type='email' className='form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter email' />
+              <label htmlFor='exampleInputEmail1'>Password</label>
+              <input type='email' className='form-control' id='exampleInputEmail1' aria-describedby='emailHelp' placeholder='Enter password' />
             </div>
             <button type='submit' className='btn btn-primary'>Submit</button>
           </form>
