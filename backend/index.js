@@ -43,10 +43,10 @@ app.use(express.json({
   strict: true
 }))
 
-app.post('/api/login', (req, res) => {
-  if (req.body.email) {
-    console.log(req.body.email)
-    Borrower.findOne({email: req.body.email}, (error, borrower) => {
+app.get('/api/login', (req, res) => {
+  if (req.query.email) {
+    let email = req.query.email
+    Borrower.findOne({email: email}, (error, borrower) => {
       if (borrower) {
         req.session.authenticated = true;
         req.session.user = {
@@ -55,6 +55,8 @@ app.post('/api/login', (req, res) => {
           role: ['BRORROWER']
         }
         res.send(borrower)
+      } else {
+        res.status(401).send()
       }
     })
   } else {
@@ -101,7 +103,7 @@ app.post('/api/admin/issue-token', (req, res) => {
 
     res.send({cd: 0})
   });
-  
+
 })
 
 app.post('/api/send', (req, res) => {
@@ -153,7 +155,7 @@ app.post('/api/admin/approve-request-borrow', (req, res) => {
   });
 
   res.send({cd: 0})
-  
+
 })
 
 app.post('/api/sign-borrow-request', (req, res) => {
@@ -189,14 +191,14 @@ app.get('/api/token-status', (req, res) => {
       //     loan: 50,
       //     remain: 0,
       //     numreq: 4 }
-    } 
+    }
 
     res.send({
       data: result
     })
 
   });
-  
+
 });
 
 app.get('/api/admin/loans', (req, res) => {
@@ -210,7 +212,7 @@ app.get('/api/admin/loans', (req, res) => {
 
     if( body.rows && body.rows.length > 0) {
       result = body.rows;
-    } 
+    }
 
     res.send({
       data: result
@@ -230,7 +232,7 @@ app.get('/api/admin/loan_req', (req, res) => {
 
     if( body.rows && body.rows.length > 0) {
       result = body.rows;
-    } 
+    }
 
     res.send({
       data: result
@@ -250,7 +252,7 @@ app.get('/api/admin/payback_req', (req, res) => {
 
     if( body.rows && body.rows.length > 0) {
       result = body.rows;
-    } 
+    }
 
     res.send({
       data: result
@@ -298,17 +300,17 @@ raw.init()
       // console.log('create');
       // raw.createTx({from: "sontt", quantity: 100}, (err, res) => {
 
-setTimeout(() => {
-raw.createTx({from: "sontt", quantity: 100}, (err, res) => {
-  // console.log(err)
-  // console.log('================')
-  // console.log(res)
-})
-}, 1000);
+      setTimeout(() => {
+        raw.createTx({from: "sontt", quantity: 100}, (err, res) => {
+          // console.log(err)
+          // console.log('================')
+          // console.log(res)
+        })
+      }, 1000);
 
 
-const demux = require('modules/demux')
-demux.start()
+      const demux = require('modules/demux')
+      demux.start()
 
       //   rawTx = raw.signTx("5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3", res);
       //   console.log('rawTx :', rawTx);
@@ -320,4 +322,4 @@ demux.start()
     })
   });
 
-  
+
