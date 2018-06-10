@@ -1,38 +1,32 @@
 import React, { Component } from 'react'
-import moment from 'moment'
+import { DONATION_STATUS } from '../../../../common/config'
 
 const donationHistoryItem = ({item, index}) => (
-  <div
-    style={{
-      display: 'flex',
-      borderBottomWidth: 1,
-      borderBottomColor: '#D3D3D3',
-      borderBottomStyle: 'solid',
-      padding: 10,
-      backgroundColor: 'white'
-    }}
-    key={index}
-  >
-    <div style={{ flex: 1 }}>
-      <div style={{ display: 'flex' }}>
-        <div style={{ flex: 1, fontSize: 13, color: '#D4D4D4' }}>
-        from: <strong style={{ fontSize: 15, color: 'rgb(51, 51, 51)' }}>{item.from}</strong>
-        </div>
-        <div style={{ flex: 1, fontSize: 13, color: '#D4D4D4' }}>
-        amount: <strong style={{ fontSize: 15, color: 'rgb(51, 51, 51)' }}>{`${item.amount} ${item.type}`}</strong>
-        </div>
+  <div className='inf-home-donation-history-item' key={index}>
+    <div className='inf-flex'>
+      <div style={{ flex: 1, fontSize: 15, color: '#D4D4D4' }}>
+        from: <strong style={{ fontSize: 15 }}>{item.from}</strong>
       </div>
-      <div style={{ fontStyle: 'italic', color: '#D4D4D4' }}>
-        {item.memo || '...'} - <span style={{ fontSize: 13 }}>{moment(item.donateDate).format()}</span>
+      <div style={{ flex: 1, fontSize: 15, color: '#D4D4D4' }}>
+        amount: <strong>{item.quantity}</strong>
       </div>
     </div>
-    <div style={{ width: 70 }}>
-      {item.status === 'inreview' ? <span className='badge badge-pill badge-warning'>in-review</span> : <span className='badge badge-pill badge-primary'>success</span>}
+    <div style={{ fontStyle: 'italic', color: '#D4D4D4' }}>
+      tx: {item.tx_id || '...'}
+    </div>
+    <div style={{ position: 'absolute', top: 10, right: 0 }}>
+      <span className={`badge badge-pill ${DONATION_STATUS[item.status]}`}>{item.status}</span>
     </div>
   </div>
 )
 
 class DonationHistory extends Component {
+  componentDidMount () {
+    const { getDonationHistoryData } = this.props
+
+    getDonationHistoryData()
+  }
+
   render () {
     const {
       donateHistory

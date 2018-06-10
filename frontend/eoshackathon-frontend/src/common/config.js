@@ -7,3 +7,8 @@ export const BORROW_STATUS_COLOR = {
   'BACK': 'badge-secondary',
   'OVER': 'badge-danger'
 }
+
+export const DONATION_STATUS = {
+  'NEW': 'badge-primary',
+  'ISSUED': 'badge-success'
+}

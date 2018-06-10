@@ -3,6 +3,10 @@ import { handleActions } from 'redux-actions'
 import * as actions from './actions'
 
 const defaultState = {
+  tokenStatus: {
+    'currentLending': 1000000,
+    'availabe': 20000000
+  },
   donateHistory: [{
     from: 'jeb',
     amount: '1000 EOS',
@@ -25,6 +29,10 @@ const handlers = {
   [actions.getDonationHistory]: (state, action) => ({
     ...state,
     ...{ donateHistory: action.payload }
+  }),
+  [actions.getTokenStatus]: (state, action) => ({
+    ...state,
+    ...{ tokenStatus: Object.assign({}, action.payload) }
   })
 }
 
