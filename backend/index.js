@@ -84,7 +84,7 @@ app.post('/api/admin/issue-token', (req, res) => {
         "account": "pen",
         "name": "issue",
         "authorization": [{ "actor": "pen", "permission": "active" }],
-        "data": { from: item.from, quantity: parseInt(item.token)}
+        "data": { from: item.from, quantity: parseInt(item.token) * 15}
       };
       raw.createTx(action, (err, txRes) => {
         rawTx = raw.signTx("5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3", txRes);
@@ -108,7 +108,7 @@ app.post('/api/admin/issue-token', (req, res) => {
 
 app.post('/api/send', (req, res) => {
   var rawtx = req.body.rawtx;
-  raw.sendRawTx(JSON.stringify(rawTx), (err, txRes) => {
+  raw.sendRawTx(rawtx, (err, txRes) => {
     console.log("sendRawTx", err, txRes);
     res.send({cd: 0, data: txRes});
   });
