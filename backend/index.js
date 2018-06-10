@@ -3,17 +3,26 @@ const cookieParser = require('cookie-parser')
 const session      = require('express-session');
 const Fcbuffer     = require('fcbuffer')
 const request      = require('request')
+const cors         = require('cors');
 
 const eos                = require('modules/eos')
 const config             = require('modules/config')
 const logger             = require('modules/logger')
 const mongooseConnection = require('modules/mongoose-connection')
 const Donation = require('modules/models/donation.js')
+const ActionHistory = require('modules/models/action-history')
+const Borrower = require('modules/models/borrower')
 
 const raw = require('modules/rawTransaction');
 
 const app = express()
 
+app.use(express.json({
+  limit: '100mb',
+  strict: true
+}))
+
+app.use(cors())
 app.use(cookieParser())
 app.use(session({
   name: '__sid',
@@ -34,13 +43,33 @@ app.use(express.json({
   strict: true
 }))
 
+app.post('/api/login', (req, res) => {
+  if (req.body.email) {
+    console.log(req.body.email)
+    Borrower.findOne({email: req.body.email}, (error, borrower) => {
+      if (borrower) {
+        req.session.authenticated = true;
+        req.session.user = {
+          id: borrower._id,
+          eosAccountName: borrower.eosAccountName,
+          role: ['BRORROWER']
+        }
+        res.send(borrower)
+      }
+    })
+  } else {
+    res.status(401).send()
+  }
+})
+
 app.get('/ping', function(req, res) {
   return res.send('ok');
 })
 
-app.get('/api/donation-history', (req, res) => {
-  // let mock = '{ "data": [{ "id": "1", "from": "daicuong", "amount": "100", "type": "EOS", "memo": "Hope this help!", "donateDate": 1528553367201, "converToFiatDate": 1528553367201, "fiat": "2000", "status": "donated" }, { "id": "2", "from": "daicuong", "amount": "100", "type": "EOS", "memo": "Hope this help!", "donateDate": 1528553367201, "converToFiatDate": 1528553367201, "fiat": "20000", "status": "inreview" }] }'
-  // res.send(JSON.parse(mock))
+app.get('/api/action-history', (req, res) => {
+  ActionHistory.find({}, (error, result) => {
+    res.send({data: result})
+  })
 })
 
 
@@ -269,21 +298,17 @@ raw.init()
       // console.log('create');
       // raw.createTx({from: "sontt", quantity: 100}, (err, res) => {
 
-      //   rawTx = raw.signTx("5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3", res);
-      //   console.log('rawTx :', rawTx);
-      //   raw.sendRawTx(JSON.stringify(rawTx), (err, res) => {
-      //     console.log("sendRawTx", err, res);
-      //   });
+setTimeout(() => {
+raw.createTx({from: "sontt", quantity: 100}, (err, res) => {
+  // console.log(err)
+  // console.log('================')
+  // console.log(res)
+})
+}, 1000);
 
-      // })
 
-      // var action = {
-      //   "account": "pen",
-      //   "name": "issue",
-      //   "authorization": [{ "actor": "pen", "permission": "active" }],
-      //   "data": {from: "sontt", quantity: 100}
-      // }
-      // raw.createTx(action, (err, res) => {
+const demux = require('modules/demux')
+demux.start()
 
       //   rawTx = raw.signTx("5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3", res);
       //   console.log('rawTx :', rawTx);
