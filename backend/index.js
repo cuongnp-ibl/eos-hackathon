@@ -46,7 +46,7 @@ app.get('/api/donation-history', (req, res) => {
 
 app.post('/api/admin/issue-token', (req, res) => {
   var id = req.body.id;
-  Donation.findOne({"_id": id}, (err, item) => {
+  Donation.findOne({"_id": id, "status": "NEW"}, (err, item) => {
     console.log('item :', item);
     if( item != null ) {
       var action = {
@@ -61,6 +61,12 @@ app.post('/api/admin/issue-token', (req, res) => {
         raw.sendRawTx(JSON.stringify(rawTx), (err, txRes) => {
           console.log("sendRawTx", err, txRes);
         });
+      });
+
+      item.status = "ISSUED";
+      item.save(function (err) {
+        if (err) return handleError(err);
+        // saved!
       });
     }
 
