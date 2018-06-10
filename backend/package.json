@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
     "eosjs": "^14.1.0",
     "eosjs-ecc": "^4.0.1",
     "express": "^4.16.3",

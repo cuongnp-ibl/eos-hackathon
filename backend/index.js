@@ -2,6 +2,7 @@ const express      = require('express')
 const cookieParser = require('cookie-parser')
 const session      = require('express-session');
 const Fcbuffer     = require('fcbuffer')
+const cors         = require('cors');
 
 const eos                = require('modules/eos')
 const config             = require('modules/config')
@@ -19,6 +20,7 @@ app.use(express.json({
   strict: true
 }))
 
+app.use(cors())
 app.use(cookieParser())
 app.use(session({
   name: '__sid',
